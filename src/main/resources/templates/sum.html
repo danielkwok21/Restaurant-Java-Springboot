@@ -1,1 +1,25 @@
-<span th:text="${sum}"></span>
+<div id="menu" class="container">
+    <h1 class="my-4">Menu</h1>
+    <div class="row">
+        <div th:hx-get="'/updateSum?id='+${food.id}" hx-target="#menu" hx-swap="outerHTML" class="col-md-4" th:each="food : ${foods}">
+            <div class="food-item card">
+                <img th:src="@{${food.image}}" class="food-image card-img-top" alt="Image of [[${food.name}]]"/>
+                <div class="card-body food-card">
+                    <h2 class="food-name card-title" th:text="${food.name}"></h2>
+                    <div>
+                        <p class="food-desc card-text" th:text="${food.description}"></p>
+                        <p class="food-price card-text"><span th:text="${food.price}"></span></p>
+                    </div>
+
+                    <p th:if="${food.isSelected}" style="color:red">Selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 14px">
+        <div class="footer card">
+            <p>Total: <span id="price" th:text="${sum}"></span></p>
+
+        </div>
+    </div>
+</div>
