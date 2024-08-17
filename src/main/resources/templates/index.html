@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+    <style>
+    .food-item {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 04px 8px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+    .food-image {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    .food-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .food-card:hover {
+        cursor: pointer;
+    }
+
+    .food-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .food-price {
+        font-size: 0.8rem;
+        color: #8c8c8c;
+    }
+    .food-desc {
+        font-size: 0.8rem;
+    }
+
+    .footer {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 04px 8px rgba(0, 0, 0, 0.1);
+        height: 50px;
+    }
+</style>
+
+</head>
+<body>
+<div class="container">
+    <h1 class="my-4">Menu</h1>
+    <div class="row">
+        <div class="col-md-4" th:each="food : ${foods}">
+            <div th:hx-get="'/updateSum?id='+${food.id}" hx-target="#price" class="food-item card">
+                <img th:src="@{${food.image}}" class="food-image card-img-top" alt="Image of [[${food.name}]]"/>
+                <div class="card-body food-card">
+                    <h2 class="food-name card-title" th:text="${food.name}"></h2>
+                    <div>
+                        <p class="food-desc card-text" th:text="${food.description}"></p>
+                        <p class="food-price card-text"><span th:text="${food.price}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 14px">
+        <div class="footer card">
+            <p>Total: <span id="price">00.00</span></p>
+
+        </div>
+    </div>
+</div><!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+
+    function addToSum(price) {
+        fetch(`/updateSum?price=${price}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalSum').textContent = data.toFixed(2);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
